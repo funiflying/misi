@@ -1,0 +1,55 @@
+extends ../admin-layout
+block content
+    .user-info
+        .info-icon
+            .media
+                .media-left
+                    img.user-icon(src="#{USER.avatar}")
+                .media-body
+                    strong.user-name #{USER.name}
+                    p
+                        a(href="/admin/user/info")
+                            i.glyphicon.glyphicon-edit
+                            span 个人设置
+            .info-line
+            .top-icon
+            .bottom-icon
+    div(style="margin-top:30px;display:flex")
+        .order-l
+            h4.admin-subtitle 我的订单
+                a.pull-right(href="/admin/order") 全部订单
+            if orders.length>0
+                each item in orders
+                    each good in item.goods
+                        .checkout-product-list
+                            a(href="/goods/#{good.product}?sid=#{good.sid}" target="_blank",style="color:#666")
+                                .cover
+                                    img(src='#{good.cover}?imageView2/2/w/85/h/65/interlace/0/q/100')
+                                .describe
+                                    p #{good.name}
+                                    small #{good.specify}
+                                .describe
+                                    p #{item.address.name}
+                                strong.price  #{utils.currency(good.price)}
+                                .amount x#{good.count}
+                                .describe(style="text-align:right") #{utils.order(item.status)}
+            else
+                .no-orders
+                    p 您还没有订单
+
+
+        .order-r
+            h4.admin-subtitle 热门推荐
+            if goods.length>0
+                each good in goods
+                    .checkout-product-list
+                        a(href="/goods/#{good.product}?sid=#{good.sid}" target="_blank",style="color:#666")
+                            .cover
+                                img(src='#{good.cover}?imageView2/2/w/85/h/65/interlace/0/q/100')
+                            .describe
+                                p #{good.name}
+                                small #{good.subtitle}
+                                small #{good.specify}
+            else
+                .no-orders
+                    p 根据您的下单喜好推荐

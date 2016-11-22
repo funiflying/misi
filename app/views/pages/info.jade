@@ -1,0 +1,156 @@
+extends ../admin-layout
+block content
+    .admin-title 我的资料
+    .user-info-container
+        ul.nav.nav-tabs(role="tablist")
+            li.active(role="presentation")
+                a(href="#info" role="tab" data-toggle="tab") 基本信息
+            li(role="presentation" )
+                a(href="#header-icon" role="tab" data-toggle="tab") 头像照片
+        .tab-content
+            .tab-pane.active#info(role="tabpanel")
+                form.form-horizontal#user-form(role="form",method="post" ,action="/admin/customer/update")
+                    .form-group#err(style="display:none")
+                        .col-md-4.col-md-offset-1.err-alert
+                            i.glyphicon.glyphicon-minus-sign
+                            span  操作失败
+                    .form-group#success(style="display:none")
+                        .col-md-4.col-md-offset-1.success-alert
+                            i.glyphicon.glyphicon-ok-sign
+                            span  修改成功
+                    .form-group.has-feedback
+                        label.col-md-2.control-label 用户名
+                        .col-md-3
+                            input.form-control(value="#{customer.name}" name="name" required)
+                            span.glyphicon.form-control-feedback
+                        .col-md-2
+                            p.form-control-static.text-danger
+                    .form-group
+                        label.col-md-2.control-label 手机号
+                        .col-md-3
+                            input.form-control(value="#{customer.phone}" name="phone" )
+                    .form-group
+                        label.col-md-2.control-label
+                        .col-md-3
+                            button.btn.btn-danger.btn-sm 保存修改
+
+            .tab-pane#header-icon(role="tabpanel")
+                    .crop-container
+                        .imageBox
+                            .thumbBox
+                            .spinner
+                        .action
+                            .new-contentarea.tc
+                                a.upload-img
+                                    label(for="upload-file") 选择头像
+                                input#upload-file(type="file",name="file")
+                            button.Btnsty_peyton#btnCrop 上传
+                            button.Btnsty_peyton#btnZoomIn +
+                            button.Btnsty_peyton#btnZoomOut -
+                        .cropped
+
+    script(src="/libs/cropbox/cropbox.js").
+    script.
+        $(function () {
+            $('#user-form input[name=name]').on('keyup',function (e) {
+                var name=e.target.value;
+                var $this=$(this);
+                if(name&&name!=='#{customer.name}'){
+                    $.ajax({
+                        url:`/customer/name?name=${name}`,
+                        type:'get',
+                        success:function (res) {
+                            if(res.success){
+                                $this.parents('.form-group').find('.text-danger').text('用户名已存在')
+                                $this.parents('.form-group').find('.form-control-feedback').addClass('glyphicon-remove').removeClass('glyphicon-ok')
+                            }
+                            else {
+                                $this.parents('.form-group').find('.text-danger').text('')
+                                $this.parents('.form-group').find('.form-control-feedback').removeClass('glyphicon-remove').addClass('glyphicon-ok')
+                            }
+                        }
+                    })
+                }else {
+                    $this.parents('.form-group').find('.text-danger').text('')
+                    $this.parents('.form-group').find('.form-control-feedback').removeClass('glyphicon-ok glyphicon-remove')
+                }
+            });
+            $('#user-form').on('submit',function (e) {
+                e.preventDefault();
+                $(this).ajaxSubmit({
+                    success: function (res) {
+                        if (res.success) {
+                            $('#success').show()
+                            $('#err').hide()
+                        }else {
+                            $('#success').hide();
+                            $('#err').show()
+                        }
+                    },
+                    beforeSubmit: function (formDate, $form, options) {
+                        $.each(formDate, function (index, data) {
+                            if (data.required && data.value == '') {
+                                return false
+                            }
+                        })
+                        return true
+                    },
+                    clearForm: false,
+                    resetForm: false
+                })
+            })
+            var options =
+            {
+                thumbBox: '.thumbBox',
+                spinner: '.spinner',
+                imgSrc: '#{customer.avatar}'
+            }
+            var cropper = $('.imageBox').cropbox(options);
+            var img = "";
+            $('#upload-file').on('change', function () {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    options.imgSrc = e.target.result;
+                    cropper = $('.imageBox').cropbox(options);
+                    getImg();
+                }
+                reader.readAsDataURL(this.files[0]);
+                this.files = [];
+                //getImg();
+            })
+            $('#btnCrop').on('click', function () {
+                var image=cropper.getDataURL();
+                $.ajax({
+                    url: '/admin/customer/update',
+                    type:'post',
+                    data:{avatar:image},
+                    success: function (res) {
+                        if (res.success) {
+                            ui.box.alert('上传成功')
+                        } else {
+                            ui.box.alert(res.err)
+                        }
+                    }
+                })
+
+            })
+            function getImg() {
+                img = cropper.getDataURL();
+                $('.cropped').html('');
+                $('.cropped').append('<img src="' + img + '" align="absmiddle" style="width:180px;margin-top:4px;border-radius:180px;box-shadow:0px 0px 12px #7E7E7E;"><p>180px*180px</p>');
+                $('.cropped').append('<img src="' + img + '" align="absmiddle" style="width:128px;margin-top:4px;border-radius:128px;box-shadow:0px 0px 12px #7E7E7E;"><p>128px*128px</p>');
+                $('.cropped').append('<img src="' + img + '" align="absmiddle" style="width:64px;margin-top:4px;border-radius:64px;box-shadow:0px 0px 12px #7E7E7E;" ><p>64px*64px</p>');
+            }
+
+            $(".imageBox").on("mouseup", function () {
+                getImg();
+            });
+            $('#btnZoomIn').on('click', function () {
+                cropper.zoomIn();
+            })
+            $('#btnZoomOut').on('click', function () {
+                cropper.zoomOut();
+            })
+
+
+        })

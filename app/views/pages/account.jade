@@ -1,0 +1,32 @@
+extends ../admin-layout
+block content
+    .admin-title 安全中心
+    .account-container
+        .account-item
+            .account-icon(style="color:#7ABD54")
+                i.glyphicon.glyphicon-ok
+            .account-title
+                strong 登录密码
+            .account-describe 联网账号存在被盗风险，建议您定期更改密码以保护账户安全。
+            .account-operation
+                a(href="/admin/user/password") 修改
+        .account-item
+            if customer.verify
+                .account-icon(style="color:#7ABD54")
+                    i.glyphicon.glyphicon-ok
+                .account-title
+                    strong 邮箱验证
+                .account-describe 已验证#{customer.email}，可用于快速找回登录密码。
+                .account-operation
+                    a(href="/admin/user/verify") 修改
+            else
+                .account-icon(style="color:#FFCC00")
+                    i.glyphicon.glyphicon-warning-sign
+                .account-title
+                    strong 邮箱验证
+                .account-describe 验证后，可用于快速找回登录密码。
+                .account-operation
+                    a(href="/admin/user/verify") 验证
+
+
+

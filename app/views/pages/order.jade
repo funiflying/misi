@@ -1,0 +1,102 @@
+extends ../admin-layout
+block content
+    .admin-title 我的订单
+    .order-container
+            ul.nav.nav-tabs(role="tablist")
+                li(role="presentation")
+                    a(href="/admin/order") 全部订单
+                li(role="presentation")
+                    a(href="/admin/order?index=1") 待收货
+                        span.badge #{count}
+                li(role="presentation")
+                    a(href="/admin/order?index=2") 已完成
+                li(role="presentation")
+                    a(href="/admin/order?index=3") 已取消
+            .tab-content
+                .tab-pane.active#all(role="tabpanel")
+                    if orders && orders.length>0
+                        table.order-tb
+                            thead
+                                tr
+                                    th(style="width:45%") 订单详情
+                                    th 收货人
+                                    th(style="width:120px") 状态
+                                    th(style="width:120px") 金额
+                                    th(style="width:150px") 操作
+                            tbody
+                                each item in orders
+                                    tr.sep-row
+                                        td(colspan="5")
+                                    tr
+                                        td.tr-th(colspan="5")
+                                            span.dealtime #{moment(item.meta.createAt).format('YYYY-MM-DD HH : mm : SS')}
+                                            span.order-code 订单号：#{item.code}
+                                    - for(var i=0;i<item.goods.length;i++)
+                                        if(i==0)
+                                            tr
+                                                td
+                                                    .checkout-product-list
+                                                        a(href="/goods/#{item.goods[i].product}?sid=#{item.goods[i].sid}" target="_blank")
+                                                            .cover
+                                                                img(src='#{item.goods[i].cover}?imageView2/2/w/85/h/65/interlace/0/q/100')
+                                                            .describe
+                                                                p #{item.goods[i].name}
+                                                                small #{item.goods[i].specify}
+                                                            strong.price  #{utils.currency(item.goods[i].price)}
+                                                            .amount x#{item.goods[i].count}
+                                                td(rowspan=item.goods.length)
+                                                    span(data-toggle="popover" data-placement="left" data-content="#{item.address.province+item.address.city+item.address.county+item.address.content+' '+item.address.name+item.address.phone}")
+                                                        i.glyphicon.glyphicon-user
+                                                        span  #{item.address.name}
+                                                td.text-info(rowspan=item.goods.length) #{utils.order(item.status,item.distribution)}
+                                                td(rowspan=item.goods.length)
+                                                    strong(style="font-family: verdana;color: #e4393c;") #{utils.currency(item.total)}
+                                                td(rowspan=item.goods.length)
+                                                    if item.status<5
+                                                        button.btn.btn-default.btn-sm.order-cancel(data-id='#{item._id}') 取消
+                                                    if item.status<7
+                                                        button.btn.btn-danger.btn-sm.order-complete(data-id='#{item._id}',style="margin-left:10px") 完成
+                                                    else
+                                                        a(href="/goods/#{item.goods[i].product}?sid=#{item.goods[i].sid}" target="_blank",style="color:#ccc") 再次购买
+                                        else
+                                             tr
+                                                td
+                                                    .checkout-product-list
+                                                        a(href="/goods/#{item.goods[i].product}?sid=#{item.goods[i].sid}" target="_blank")
+                                                            .cover
+                                                                img(src='#{item.goods[i].cover}?imageView2/2/w/85/h/65/interlace/0/q/100')
+                                                            .describe
+                                                                p #{item.goods[i].name}
+                                                                small #{item.goods[i].specify}
+                                                             strong.price  #{utils.currency(item.goods[i].price)}
+                                                            .amount x#{item.goods[i].count}
+                    else
+                        .no-order
+                            p 您还没有订单哦
+                            a(href="/").btn.btn-danger 去首页看看
+
+            if size>1
+                nav
+                    ul.pager
+                        if previous==0
+                            li.previous.disabled
+                                a(href="javascript:void(0)") &larr;Previous
+                        else
+                            li.previous
+                                a(href="/admin/order?index=#{index}&page=#{previous}") &larr;Previous
+                        if next>size
+                            li.next.disabled
+                                a(href="javascript:void(0)") Next &rarr;
+                        else
+                            li.next
+                                a(href="/admin/order?index=#{index}&page=#{next}") Next &rarr;
+    script.
+        $(function () {
+            var index=#{index}
+            if(index){
+                $('.nav-tabs li').eq(index).addClass('active')
+            }else {
+                $('.nav-tabs li').eq(0).addClass('active')
+            }
+            $("[data-toggle='popover']").popover({trigger:'hover'});
+        })

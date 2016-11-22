@@ -1,0 +1,299 @@
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background-color: rgba(228,80,80,.6);
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: #e45050;
+}
+.chat-container{
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+  width: 230px;
+  height: 480px;
+  border:2px solid #dd0330;
+  background: #FFFFFF;
+  border-radius: 5px;
+  z-index:999 ;
+  overflow: hidden;
+  -webkit-transition: width .5s;
+  -moz-transition: all .5s;
+  -ms-transition: all .5s;
+  -o-transition: all .5s;
+  transition: all .5s;
+
+  &.minimum{
+    height: 45px;
+    -webkit-transition: width .5s;
+    -moz-transition: all .5s;
+    -ms-transition: all .5s;
+    -o-transition: all .5s;
+    transition: all .5s;
+    .toolbar-container{
+      border-bottom: none;
+    }
+    .toolbar-icon-minus{
+      visibility: hidden;
+    }
+    .toolbar-icon-full{
+      visibility: visible;
+    }
+  }
+  .toolbar-container
+  {
+    height: 45px;
+    padding: 0 8px;
+    background: #dd0330;
+    color: #FFFFFF;
+  }
+  .toolbar-icon-minus,.toolbar-icon-full{
+    font-size: 10px;
+    cursor: pointer;
+    line-height: 45px;
+    float: right;
+    color: #FFFFFF;
+  }
+  .toolbar-icon-full{
+    visibility: hidden;
+  }
+  .toolbar-icon-avatar{
+    width: 35px;
+    height: 32px;
+    margin-top: 6px;
+    float: left;
+    img
+    {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+    }
+  }
+  .toolbar-icon-name{
+    float: left;
+    line-height: 45px;
+    margin-left: 8px;
+  }
+  .chat-user-list{
+    padding: 8px 0;
+    .item{
+      display: flex;
+      padding:0 8px;
+      height: 40px;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      color: #bba555;
+      &:hover{
+        background: #e45050;
+        color: #FFFFFF;
+      }
+    }
+    .avatar{
+      flex:1;
+      img{
+        width: 30px;
+        height: 30px;
+        margin-top: 3px;
+        border-radius: 50%;
+      }
+      &.offline{
+        img{
+          -webkit-filter: grayscale(100%);
+          -moz-filter: grayscale(100%);
+          -o-filter: grayscale(100%);
+          filter: grayscale(100%);
+        }
+      }
+
+    }
+    .name{
+      flex: 3;
+      font-size: 14px;
+
+    }
+    .message{
+      flex: 1;
+      text-align: center;
+      .badge{
+        background:#dd0330 ;
+      }
+    }
+  }
+
+}
+.chat-window-container{
+  width: 550px;
+  height: 420px;
+  position: fixed;
+  left: 50%;
+  top:50%;
+  border:2px solid #e45050;
+  background: #e45050;;
+  border-radius: 5px;
+  z-index: 999;
+  padding: 2px;
+  overflow: hidden;
+  -webkit-transform: translate(-275px,-210px);
+  -moz-transform: translate(-275px,-210px);
+  -ms-transform: translate(-275px,-210px);
+  -o-transform: translate(-275px,-210px);
+  transform: translate(-275px,-210px);
+  -webkit-transition: all .5s;
+  -moz-transition: all .5s;
+  -ms-transition: all .5s;
+  -o-transition: all .5s;
+  transition: all .5s;
+  &.minimum{
+    width: 0;
+    height: 0;
+    border: none;
+    opacity: 0;
+    left:100%;
+    top:100%;
+
+  }
+  .chat-window-toolbar{
+    padding: 0 10px;
+    height: 35px;
+    background: #e45050;
+    color: #FFFFFF;
+    line-height: 35px;
+  }
+  .toolbar-icon-close{
+    font-size: 10px;
+    cursor: pointer;
+    line-height: 35px;
+    float: right;
+    color: #FFFFFF;
+  }
+  .chat-content{
+    width: auto;
+    height: 230px;
+    background: #FFFFFF;
+  }
+  .chat-thread{
+    padding: 10px 20px;
+    list-style: none;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 230px;
+    li {
+      position: relative;
+      clear: both;
+      display: inline-block;
+      padding: 8px 40px 8px 20px;
+      margin: 0 0 20px 0;
+      max-width: 80%;
+      font: 16px/20px 'Noto Sans', sans-serif;
+      border-radius: 10px;
+      &:before {
+        position: absolute;
+        top: 0;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        content: '';
+        display: block;
+      }
+      &:after {
+        position: absolute;
+        top: 10px;
+        content: '';
+        width: 0;
+        height: 0;
+      }
+      &.from {
+        animation: show-chat-odd 0.15s 1 ease-in;
+        -moz-animation: show-chat-odd 0.15s 1 ease-in;
+        -webkit-animation: show-chat-odd 0.15s 1 ease-in;
+        float: right;
+        margin-right: 60px;
+        color: #FFFFFF;
+        background-color:  #e45050;
+      }
+      &.from:before {
+        right: -60px;
+        background: url('http://www.touxiangsky.com/image/allimg/120703/3-www.touxiangsky.com-120F3120447.jpg');
+        background-size: 32px;
+      }
+      &.from:after {
+        border-right: 15px solid transparent;
+        right: -15px;
+        border-top: 14px solid  #e45050;
+      }
+      &.to {
+        animation: show-chat-even 0.15s 1 ease-in;
+        -moz-animation: show-chat-even 0.15s 1 ease-in;
+        -webkit-animation: show-chat-even 0.15s 1 ease-in;
+        float: left;
+        margin-left: 60px;
+        color: #FFFFFF;
+        background:#dd0330;
+      }
+      &.to:before {
+        left: -60px;
+        background: url('http://p3.wmpic.me/article/2015/06/02/1433215028_izroKASS.jpeg');
+        background-size: 32px;
+      }
+      &.to:after {
+        border-left: 15px solid transparent;
+        left: -15px;
+        border-top: 14px solid  #dd0330;
+      }
+    }
+  }
+  .chat-enter{
+    height: 80px;
+    background: #FFFFFF;
+    margin-top: 45px;
+    display: flex;
+    border-radius: 5px;
+    border:2px solid #e45050;
+    .form{
+      flex: 5;
+      width: 100%;
+      height: 80px;
+      border:none;
+      padding: 10px;
+      outline: none;
+      overflow-y: auto;
+      overflow-x: hidden;
+      &:focus{
+        outline: none;
+      }
+    }
+    .enter{
+      flex:1;
+      button{
+        height: 75px;
+        width: 100%;
+        border: none;
+        color: #FFFFFF;
+        border:2px solid #FFFFFF;
+        background: #e45050;
+        font-size: 18px;
+        font-weight: 700;
+        outline: none;
+      }
+    }
+  }
+}
+.twinkling-icon{
+  -webkit-animation:twinkling .5s ease-in infinite;
+  -o-animation:twinkling .5s ease-in infinite;
+  animation:twinkling .5s ease-in infinite;
+}
+@keyframes  twinkling{
+  0%{
+    margin-left:0;
+    margin-top: 0;
+  }
+  100%{
+    margin-left: 1px;
+    margin-top: 1px;
+  }
+}

@@ -1,0 +1,47 @@
+extends ../layout
+block content
+    .line
+    .product-container
+        .container
+                h4  #{category.name}
+                    small  #{category.subtitle}
+                .row.product-list
+                    each product in products
+                        .col-md-3.item
+                            a(href="/goods/#{product._id}")
+                                img.cover(src="#{product.picture && product.picture[0]}?imageView2/2/w/560/h/454/interlace/0/q/100")
+                                h5.product-title #{product.name}
+                                section.product-describe
+                                    h6 #{product.subtitle}
+                                    p 类型：#{product.type}
+                                    p.ellipsis 原料：#{product.material}
+                                    p 口味：#{product.flavor}
+
+        .container
+            h2.category-title 每实每刻
+            .product-assort
+                .item
+                    img(src="/images/tea.jpg")
+                    section.title(style="padding-right:0")
+                        .text 下午茶
+                    img.img-icon(src="/images/teaHover.png")
+                .item
+                    img(src="/images/season.jpg")
+                    section.title
+                        .text 时令
+                    img.img-icon(src="/images/season.png")
+                .item
+                    img(src="/images/coffee.jpg")
+                    section.title
+                        .text 咖啡
+                    img.img-icon(src="/images/coffee.png")
+                .item
+                    img(src="/images/nearby_food.jpg")
+                    section.title
+                        .text 周边
+                    img.img-icon(src="/images/nearby.png")
+                .item
+                    img(src="/images/mes_ar.jpg")
+                    section.title
+                        .text 专题
+                    img.img-icon(src="/images/time_ms.png")

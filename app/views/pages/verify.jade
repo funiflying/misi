@@ -1,0 +1,27 @@
+extends ../admin-layout
+block content
+    .admin-title 邮箱验证
+    .user-info-container
+        form.form-horizontal#user-form(role="form",method="post" ,action="/admin/customer/verify")
+            if error
+                .form-group
+                    .col-md-4.col-md-offset-1.err-alert
+                        i.glyphicon.glyphicon-minus-sign
+                        span  #{error}
+            if success
+                .form-group
+                    .col-md-4.col-md-offset-1.success-alert
+                        i.glyphicon.glyphicon-ok-sign
+                        span  #{success}
+            .form-group.has-feedback
+                label.col-md-2.control-label 邮箱地址
+                .col-md-3
+                    input.form-control(type="email" name="email" required value="#{email}")
+                    span.glyphicon.form-control-feedback
+                .col-md-2
+                    p.form-control-static.text-danger
+            .form-group
+                label.col-md-2.control-label
+                .col-md-3
+                    button.btn.btn-danger.btn-sm 发送邮件
+

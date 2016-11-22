@@ -1,0 +1,57 @@
+doctype
+html
+    head
+        meta(charset="utf-8")
+        title 美思 #{title}
+        include ../includes/head
+    body
+        nav.navbar.navbar-main(role="navigation")
+            .top-bar(style="background:#fff")
+                .container.top-bar-container
+                    .top-bar-part.company-logo
+                        .log
+                            a(href="/")
+                                img.img-responsive(src="/images/logo.png")
+                    .top-bar-part.menu-bar
+                        .chetongxiang-link
+
+                        .chetongxiang-link
+
+                        .chetongxiang-link
+
+                        .chetongxiang-link
+        .login
+            .container.login-container
+                .login-welcome
+                    h3.welcome-text 很高兴遇见您
+                    h3.welcome-text-lg 登录
+                .login-box
+                    .login-content
+                        h3.title 登录
+                            a.pull-right(href="/register") 立即注册
+                        form(role="form",method="post",action="/login")
+                            .form-group
+                                .input-group
+                                    .input-group-addon
+                                        i.glyphicon.glyphicon-user
+                                    input.form-control.input-lg(type="text",placeholder="用户名",name="customer[name]",value="#{customer.name}")
+                            .form-group
+                                .input-group
+                                    .input-group-addon
+                                        i.glyphicon.glyphicon-lock
+                                    input.form-control.input-lg(type="password",placeholder="密码",name="customer[password]",value="#{customer.password}")
+                            p.text-right
+                                a(href="/cipher") 忘记密码
+                            .form-group
+                                button.btn.btn-primary.btn-block.btn-lg(type="submit") 登录
+                            if error
+                                .has-error
+                                   i.glyphicon.glyphicon-info-sign
+                                   span=error
+        footer.footer
+            .footer-about(style="background:#FFF;color:#666")
+                i.glyphicon.glyphicon-phone-alt &nbsp;
+                span 联系电话
+                span.telephone 18650320029
+
+

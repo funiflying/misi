@@ -1,0 +1,138 @@
+﻿/* ui.box */
+.ui-box-c {}
+.ui-box-c-nopadding .ui-box-content {
+    padding: 0;
+    overflow: hidden;
+}
+.ui-box {
+    position: absolute; 
+    top: 36px; 
+    left: 36px; 
+    background-color: #fff;
+    color: #333;
+    border-radius: 2px;
+ /*   box-shadow: 1px 1px 50px rgba(0,0,0,.3);*/
+    min-width: 280px;
+    border: 4px solid rgba(0,0,0,0.1);
+}
+.ui-box-cover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+.ui-box-ghost {
+    display: none;
+    position: absolute;
+    box-sizing: border-box;
+    border: 3px solid rgba(0,0,0,.5);
+    background-color: rgba(255,255,255,.3);
+    cursor: move;
+}
+.ui-box-header {
+    position: relative;
+    padding: 0 80px 0 20px;
+    height: 34px;
+    line-height: 36px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+    color: #333;
+    background-color: #F8F8F8;
+    border-radius: 2px 2px 0 0;
+    cursor: move;
+}
+.ui-box-close {
+    position: absolute;
+    top: 2px;
+    right: 10px;
+    font-size: 16px;
+    padding: 4px 5px;
+    line-height: initial;
+    cursor: pointer;
+}
+.ui-box-close:hover {
+    color: #ffbb33;
+}
+.ui-box-content {
+    padding: 20px;
+    overflow-y: auto;
+}
+.ui-box-btn {
+    text-align: right;
+    padding: 10px;
+    font-size: 14px;
+}
+.ui-box-btn-a {
+    display: inline-block;
+    vertical-align: top;    
+    height: 24px;
+    line-height: 24px;
+    margin: 0 5px 0 10px;
+    padding: 0 15px;
+    border: 1px solid #dedede;
+    background-color: #f1f1f1;
+    color: #333;
+    border-radius: 2px;
+    cursor: pointer;
+    text-decoration: none;
+}
+.ui-box-btn-a-ok {
+    background-color: #2185D0;
+    border-color: #4898d5;
+    color: #fff;
+}
+.ui-box-btn-cancel {
+    border: 1px solid #dedede;
+    background-color: #f1f1f1;
+    color: #333;
+}
+.ui-box-btn-a:hover {
+    opacity: .9;
+}
+.ui-box-zoomIn {
+    -webkit-animation-duration: .3s;
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-name: ui-box-zoomIn;
+    animation-duration: .3s;
+    animation-fill-mode: both;    
+    animation-name: ui-box-zoomIn;
+}
+@keyframes ui-box-zoomIn {
+  from {
+    opacity: 0;
+    -webkit-transform: scale3d(.5, .5, .5);
+    transform: scale3d(.5, .5, .5);
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes ui-box-zoomIn {
+  from {
+    opacity: 0;
+    -webkit-transform: scale3d(.5, .5, .5);
+    transform: scale3d(.5, .5, .5);
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

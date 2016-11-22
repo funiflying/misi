@@ -1,0 +1,72 @@
+extends ../admin-layout
+block content
+    .admin-address-container
+        .address-add-btn
+            a.btn.btn-warning(data-toggle="modal" data-target="#addressModel") 新增收货地址
+        .address-list.clearfix
+            if addresses.length>0
+                each item in addresses
+                    .item
+                        .address-title
+                            h3 #{item.name}
+                            .extra
+                                a.del-btn(href="javascript:void(0)",data-id="#{item._id}")
+                        .address-content
+                            p
+                                span.label 收货人：
+                                span #{item.name}
+                            p
+                                span.label 所在地区：
+                                span #{item.province}-#{item.city}-#{item.county}
+                            p
+                                span.label 地址：
+                                span #{item.content}
+                            p
+                                span.label 手机：
+                                span #{item.phone}
+                            .extra.pull-right(style="margin-bottom:15px")
+                                a.edit-btn(href="javascript:void(0)",data-address="#{JSON.stringify(item)}",style="margin-left:15px") 编辑
+            else
+                .no-address 您还没有收货地址，添加一个吧
+    .modal.fade#addressModel(role="dialog" aria-labelledby="myModalLabel" aria-hidden="true")
+        .modal-dialog
+            .modal-content
+                .modal-header
+                    button.close(type="button" data-dismiss="modal")
+                        span(aria-hidden="true") &times
+                    h4.modal-title 收货地址管理
+                .modal-body
+                    form.form-horizontal#addressForm(role="form",method="post",action="/admin/address/create")
+                        .form-group
+                             label.col-md-3.control-label 收货人
+                             .col-md-6
+                                input.form-control(type="text",name="name", required)
+                                input#address-id(type="hidden",name="_id")
+                        .form-group
+                            label.col-md-3.control-label 联系电话
+                            .col-md-6
+                                input.form-control(type="tel",name="phone",required)
+                        .form-group
+                            label.col-md-3.control-label 所在地区
+                            .col-md-6
+                                .col-md-4(style="padding:0")
+                                    select.form-control(style="padding:0",name="province",required)
+                                        option(selected,value="福建") 福建
+                                .col-md-4(style="padding-right:0")
+                                    select.form-control(style="padding:0",name="city",required)
+                                        option(selected,value="厦门市") 厦门市
+                                .col-md-4(style="padding-right:0")
+                                    select.form-control(style="padding:0",name="county",required)
+                                        option(selected,value="湖里区") 湖里区
+                        .form-group
+                            label.col-md-3.control-label 地址
+                            .col-md-6
+                                textarea.form-control(name="content",required)
+                        .form-group
+                            label.col-md-3.control-label
+                            .col-md-6
+                                button.btn.btn-default 保存收货地址
+    script. 
+        $(function(){
+
+        })

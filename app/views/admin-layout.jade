@@ -1,0 +1,92 @@
+doctype
+html
+    head
+        meta(charset="utf-8")
+        title 美思 #{title}
+        include ./includes/head
+    body(style="background:#f5f5f5")
+        .nav-toolbar
+            .container
+                ul.list-inline.pull-right
+                    li
+                        a(href="/admin/order") 我的订单
+                    li
+                        a(href="/admin/user/info")  #{USER.name}
+                        a(href="/login?type=logout")  退出
+                    //li
+                    //    a(href="/admin/order") 客户服务
+                    //li
+                    //    a(href="/admin/order") 网站导航
+
+
+        nav.navbar.admin-navbar(role="navigation")
+           .container
+               .logo
+                   a( href="/",target="_blank")
+               .navitems
+                   ul.list-inline
+                       li
+                            a(href="/admin") 我的首页
+                       li.admin-set-account
+                           a(href="/admin") 账户设置
+                                i.glyphicon.glyphicon-chevron-down
+                           ul.account-link
+                               li
+                                    a(href="/admin/user/info") 个人信息
+                               li
+                                    a(href="/admin/account") 账户安全
+                       //li
+                       //    a.msg-link(href="/admin") 消息
+                       //         i.msg 3
+                .nav-r
+                   .search
+                       form#search-form.form(method="get",action="/search")
+                           input.text(type="text" name="keyword")
+                           button.button(type="submit") 搜索
+                   .settleup
+                       .cw-icon
+                           i.glyphicon.glyphicon-shopping-cart
+                           a(href="/admin/cart" target="_blank")  我的购物车
+                               span.badge#cart-amount-badge
+
+        .container.clearfix(style="padding-top:30px;min-height:500px")
+                .sub-nav
+                    dl
+                        dt 订单中心
+                        dd
+                            a(href="/admin/order") 我的订单
+                        dd
+                            a(href="/admin/cart",target="_blank") 购&nbsp;物&nbsp;车
+                    dl
+                        dt 设置
+                        dd
+                            a(href="/admin/user/info") 个人信息
+                        dd
+                            a(href="/admin/account") 账户安全
+                        dd
+                            a(href="/admin/address") 收货地址
+                .admin-main
+                    block content
+
+        include ./includes/footer
+     script.
+         $(function () {
+             $.ajax({
+                 url:"/cart/amount",
+                 type:'GET',
+                 success:function (res) {
+                        $("#cart-amount-badge").text(res.amount)
+                 }
+             })
+             $('.admin-set-account').hover(function () {
+                 $(this).addClass('hover');
+
+             },function () {
+                 $(this).removeClass('hover');
+             })
+             $('#search-form').on('submit',function () {
+                 if($('input[name=keyword]').val()==''){
+                     return false
+                 }
+             })
+         })

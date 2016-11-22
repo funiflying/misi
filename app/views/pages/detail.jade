@@ -1,0 +1,222 @@
+extends ../layout
+block content
+    .container
+        .row.product-detail-container
+            .col-md-6
+                .swiper-container.product-swiper-container.gallery-top
+                    .swiper-wrapper
+                        each item in product.picture
+                            .swiper-slide(style="background-image:url(#{item}?imageView2/2/w/500/h/400/interlace/0/q/100)")
+                .swiper-container.gallery-thumbs
+                    .swiper-wrapper
+                        each item in product.picture
+                            .swiper-slide(style="background-image:url(#{item}?imageView2/2/w/500/h/400/interlace/0/q/100)")
+                    .swiper-button-next.swiper-button-white
+                    .swiper-button-prev.swiper-button-white
+            .col-md-6
+                h4 #{product.name}
+                h5 #{product.subtitle}
+                .row.product-specify-container
+                    input#product-id(type="hidden",value="#{product._id}")
+                    each item in product.specify
+                        .specify(data-id="#{item._id}" data-price=item.price,data-content=item.content) #{item.content}
+                .product-price.clearfix
+                    .choose-amount
+                        input#buy-num.buy-num(value="1")
+                        span.btn-reduce -
+                        span.btn-add +
+                     .price ￥
+                        span#price-total #{product.specify[0].price}
+                .btn-wrap
+                    if product.shelves
+                        button.btn.btn-lg.btn-cart 加入购物车
+                        button.btn.btn-danger.btn-lg.btn-submit(style="margin-left:20px") 立 即 订 购
+                    else
+                        button.btn.btn-lg.btn-default(disabled) 商品已下架
+
+        .row.product-describe-container
+             #editor.product-describe(data-content="#{product.describe}")
+    .cart-icon
+        .cart-container
+            .cart-panel
+                ul
+                    if  USER
+                        if carts.length>0
+                            each item in carts
+                                li
+                                    a(href="/goods/#{item.product._id}?sid=#{item.sid}")
+                                        .cover
+                                            img(src="#{item.product.picture[0]}?imageView2/2/w/56/h/45/interlace/0/q/100")
+                                        .describe
+                                            p.ellipsis #{item.product.name} #{item.specify}
+                                            span.pull-left #{item.price}×#{item.count}
+                                            span.pull-right.del-cart(data-id="#{item._id}") 删除
+
+                        else
+                            .nogoods 购物车中还没有商品，赶紧选购吧！
+                    else
+                        a.btn.btn-danger(href="/login?redirectURL=/admin/cart",target="_blank") 查看我的购物车
+
+                if USER
+                    a.btn-addtocart(href="/admin/cart",target="_blank") 去购物车结算
+                        i.glyphicon.glyphicon-chevron-right
+            a.cart-btn
+                i.glyphicon.glyphicon-shopping-cart
+                if carts.length>0
+                    i.dot.active
+                else
+                    i.dot
+            a.top-btn
+                i.glyphicon.glyphicon-chevron-up
+    .add-cart
+        img(src=product.picture[0])
+    script(type='text/javascript').
+       $(function () {
+           var galleryTop = new Swiper('.gallery-top', {
+               spaceBetween: 10,
+               loop: true,
+               loopedSlides: 5, //looped slides should be the same
+           });
+           var galleryThumbs = new Swiper('.gallery-thumbs', {
+               nextButton: '.swiper-button-next',
+               prevButton: '.swiper-button-prev',
+               spaceBetween: 10,
+               slidesPerView: 4,
+               touchRatio: 0.2,
+               loop: true,
+               loopedSlides: 5, //looped slides should be the same
+               slideToClickedSlide: true
+           });
+           galleryTop.params.control = galleryThumbs;
+           galleryThumbs.params.control = galleryTop;
+           var sid='#{sid}';
+           var user='#{USER}'||null;
+           if(sid){
+               $("[data-id='#{sid}']").addClass('active')
+               $('#price-total').text($("[data-id='#{sid}']").data('price'));
+           }
+           else {
+               $(".specify").eq(0).addClass('active');
+               $('#price-total').text($(".specify").eq(0).data('price'));
+           }
+           document.addEventListener('click',function (e) {
+               if(!$(e.target).hasClass('glyphicon-shopping-cart')&&!$(e.target).hasClass('cart-btn')){
+                    $('.cart-icon').removeClass('open');
+               }
+
+           })
+           $('.btn-cart').on('click', function (e) {
+               if(user){
+                   var _id=$('.specify.active').data('id');
+                   if(!_id){
+                        ui.box.alert('请选择规格')
+                        return false;
+                   }
+                   $('.add-cart').addClass('add-cart-animation');
+                   $.ajax({
+                       type: 'post',
+                       url: '/admin/cart/add',
+                       data: {
+                           pid: $('#product-id').val(),
+                           sid: _id,
+                           price: $('.specify.active').data('price'),
+                           count: $('#buy-num').val(),
+                           content: $('.specify.active').data('content')
+                       },
+                       success: function (res) {
+
+                       }
+                   })
+                   setTimeout(function () {
+                       $('.add-cart').removeClass('add-cart-animation');
+                       $('.cart-btn .dot').addClass('active')
+                       $.ajax({
+                           type: 'GET',
+                           url: '/admin/cart/list',
+                           success: function (res) {
+                               if (res) {
+                                   $('.cart-btn .dot').addClass('active');
+                                   var cart = "";
+                                   $.each(res, function (index, obj) {
+                                       cart += `<li><a href="/goods/${obj.product._id}?sid=${obj.sid}"><div class="cover"><img src="${obj.product.picture[0]}" alt=""></div><div class="describe"><p class="ellipsis">${obj.product.name} ${obj.specify}</p><span class="pull-left">${obj.price}×${obj.count}</span><span class="pull-right del-cart" data-id="${obj._id}">删除</span></div></a></li>`
+
+                                   })
+                                   $('.cart-panel ul').html(cart);
+                                   $('.btn-addtocart').show();
+                               }
+                               $('.describe').on('click', '.del-cart', function (e) {
+                                   var id = $(this).data('id');
+                                   var $this = $(this)
+                                   if (id) {
+                                       $.ajax({
+                                           type: 'post',
+                                           url: '/admin/cart/remove',
+                                           data: {_id: id},
+                                           success: function (res) {
+                                               if (res.success) {
+                                                   $this.parents('li').remove();
+                                                   if ($('.cart-panel li').length == 0) {
+                                                       $('.cart-btn .dot').removeClass('active');
+                                                       $('.cart-panel ul').html('<div class="nogoods">购物车中还没有商品，赶紧选购吧！</div>')
+                                                       $('.btn-addtocart').hide();
+                                                   }
+                                               }
+
+                                           }
+                                       })
+                                   }
+                                   return false
+                               })
+                           }
+                       })
+                   }, 1000)
+               }else {
+                    window.location.href="/login?redirectURL="+window.location.pathname;
+               }
+           });
+           $('.btn-submit').on('click',function () {
+               if (user) {
+                   $.ajax({
+                       type: 'post',
+                       url: '/admin/checkout/buy',
+                       data: {
+                           pid: $('#product-id').val(),
+                           sid: $('.specify.active').data('id'),
+                           price: $('.specify.active').data('price'),
+                           count: $('#buy-num').val(),
+                           content: $('.specify.active').data('content')
+                       },
+                       success: function (res) {
+                            if(res.success){
+                                window.location.href="/admin/checkout"
+                            }
+                       }
+                   })
+               }
+               else {
+                   window.location.href="/login?redirectURL="+window.location.pathname;
+               }
+           })
+           $('.describe').on('click','.del-cart',function (e) {
+               var id=$(this).data('id');
+                var $this=$(this)
+               if(id){
+                   $.ajax({
+                       type:'post',
+                       url:'/admin/cart/remove',
+                       data:{_id:id},
+                       success:function (res) {
+                            if(res.success){
+                                $this.parents('li').remove();
+                                if ($('.cart-panel li').length == 0) {
+                                    $('.cart-btn .dot').removeClass('active');
+                                    $('.cart-panel ul').html('<div class="nogoods">购物车中还没有商品，赶紧选购吧！</div>');
+                                    $('.btn-addtocart').hide();
+                                }
+                            }
+                       }
+                   })
+               }
+               return false
+           })
+        })

@@ -1,0 +1,95 @@
+doctype
+html
+    head
+        meta(charset="utf-8")
+        title 美思 #{title}
+        include ../includes/head
+    body
+        nav.navbar.navbar-main(role="navigation")
+            .top-bar(style="background:#fff")
+                .container.top-bar-container
+                    .top-bar-part.company-logo
+                        .log
+                            a(href="/")
+                                img.img-responsive(src="/images/logo.png")
+                    .top-bar-part.menu-bar
+                        .chetongxiang-link
+
+                        .chetongxiang-link
+
+                        .chetongxiang-link
+
+                        .chetongxiang-link
+        .login(style="background:#F8920B")
+            .container.login-container
+                .login-welcome
+                    h3.welcome-text 很高兴遇见您
+                    h3.welcome-text-lg 注册
+                .login-box
+                    .login-content
+                        h3.title 用户注册
+                            a.pull-right(href="/login") 立即登录
+                        form.register-form(role="form",method="post",action="/register")
+                            .form-group
+                                .input-group
+                                    .input-group-addon
+                                        i.glyphicon.glyphicon-user
+                                    input#name.form-control.input-lg(type="text",placeholder="用户名",name="customer[name]")
+                                span.help-block
+                            .form-group
+                                .input-group
+                                    .input-group-addon
+                                        i.glyphicon.glyphicon-lock
+                                    input#password.form-control.input-lg(type="password",placeholder="密码",name="customer[password]")
+                            .form-group
+                                button.btn.btn-primary.btn-block.btn-lg.btn-register(type="submit",style="background:#F8920B;border-color:#F8920B") 立即注册
+                            if error
+                                .has-error
+                                    i.glyphicon.glyphicon-info-sign
+                                    span=error
+        footer.footer
+            .footer-about(style="background:#FFF;color:#666")
+                i.glyphicon.glyphicon-phone-alt &nbsp;
+                span 联系电话
+                span.telephone 18650320029
+
+
+    script.
+        $(function () {
+           var args = {
+                title: "系统消息", //当值为false则不显示头部title区域，这时可css配合做出右上角close按钮的不同位置和样式
+                html: "注册成功", //html支持保留jquery事件
+               btn: { //底部的按钮，默认会显示
+                   ok: {
+                       name: "登录", //显示的文本
+                       callback: function (g) {
+                           if (g.ok) {
+                               return g.ok();
+                           }
+                       } //回调
+                   },
+                   cancel: {
+                       name: "关闭",
+                       callback: function (g) {
+                           if (g.cancel) {
+                               return g.cancel();
+                           }
+                       }
+                   }
+               },
+                callback: function () {
+                }, //在创建对话框之后回调
+                remove: function () {
+
+                }, //在销毁对话框之后回调， close按钮默认先执行cancel()，没return false再执行remove()
+                ok: function () {
+                    window.location.href="/login"
+                }, //确定按钮的点击事件
+                cancel: function () {
+                }, //取消按钮的点击事件
+            }
+            var result='#{result}';
+            if(result){
+                ui.box(args)
+            }
+        })

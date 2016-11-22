@@ -1,0 +1,20 @@
+.chat-container.minimum(data-from="#{USER._id}")
+    .toolbar-container
+        .toolbar-icon-avatar
+            img(src="#{USER.avatar}")
+        span.toolbar-icon-name #{USER.name}
+        i.toolbar-icon-minus.glyphicon.glyphicon-minus
+        i.toolbar-icon-full.glyphicon.glyphicon-th-list
+    ul.chat-user-list
+
+.chat-window-container.minimum
+    .chat-window-toolbar
+        span.name
+        i.glyphicon.glyphicon-remove.pull-right.toolbar-icon-close
+    .chat-content
+        ul.chat-thread
+        .chat-enter
+                .form#chat(contenteditable=true)
+                .enter
+                    button(type="submit") 发 送
+script(src="/js/chat.js").

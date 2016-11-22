@@ -1,0 +1,99 @@
+extends ../layout
+block content
+    .line
+    .container
+        .checkout-title 填写并核对订单信息
+        .checkout-steps
+            .step-title
+                h3 收货人/提货人信息
+                .extra-r
+                    a(href="javascript:void(0)",data-toggle="modal" data-target="#addressModel") 新增收货地址
+            .step-content
+                ul.consignee-content
+                    for item in addresses
+                        li.address-list
+                            .select-btn.address-select(data-id="#{item._id}") #{item.name}
+                            .addr-detail  #{item.name} #{item.province}#{item.city}#{item.county}#{item.content} #{item.phone}
+                            .op-btns
+                                a.edit-btn(href="javascript:void(0)",data-address="#{JSON.stringify(item)}") 编辑
+            .hr
+            .step-title
+                h3 支付方式
+            .step-content.clearfix
+                .select-btn.pay-select.selected(data-id="1") 货到付款
+            .hr
+            .step-title
+                h3 配送方式
+                a(href="/admin/cart").pull-right 返回购物车修改
+            .step-content.clearfix
+                   div.peisong.clearfix
+                        .clearfix
+                            .select-btn.peisong-select.selected(data-id="1")  送货
+                            .select-btn.peisong-select(data-id="2")  自提
+                        .step-title
+                            h3 添加备注
+                        .step-content
+                            textarea.note.form-control(style="width:60%",type="text" ,placeholder="请将购买需求在备注中做详细说明")
+                   div.qingdan.clearfix(style="padding:10px;background:#f3fbfe")
+                       .step-title
+                           h3 送货清单
+                       each item in carts
+                           .checkout-product-list
+                               a(href="/goods/#{item.product._id}?sid=#{item.sid}" target="_blank")
+                                   .cover
+                                       img(src='#{item.product.picture[0]}?imageView2/2/w/85/h/65/interlace/0/q/100')
+                                   .describe
+                                       p #{item.product.name}
+                                       small #{item.specify}
+                                    strong.price  ￥#{item.price}
+                                   .amount x#{item.count}
+
+
+        .order-summary
+            p
+                span 应付总额：
+                span.price-num ￥#{total}
+        .checkout-buttons
+            button.btn.btn-danger.order-submit 提交订单
+        .modal.fade#addressModel(role="dialog" aria-labelledby="myModalLabel" aria-hidden="true")
+            .modal-dialog
+                .modal-content
+                    .modal-header
+                        button.close(type="button" data-dismiss="modal")
+                            span(aria-hidden="true") &times
+                        h4.modal-title 收货地址管理
+                    .modal-body
+                        form.form-horizontal#addressForm(role="form",method="post",action="/admin/address/create")
+                            .form-group
+                                label.col-md-3.control-label 收货人
+                                .col-md-6
+                                    input.form-control(type="text",name="name", required)
+                                    input#address-id(type="hidden",name="_id")
+                            .form-group
+                                label.col-md-3.control-label 联系电话
+                                .col-md-6
+                                    input.form-control(type="tel",name="phone",required)
+                            .form-group
+                                label.col-md-3.control-label 所在地区
+                                .col-md-6
+                                    .col-md-4(style="padding:0")
+                                        select.form-control(style="padding:0",name="province",required)
+                                            option(selected,value="福建") 福建
+                                    .col-md-4(style="padding-right:0")
+                                        select.form-control(style="padding:0",name="city",required)
+                                            option(selected,value="厦门市") 厦门市
+                                    .col-md-4(style="padding-right:0")
+                                        select.form-control(style="padding:0",name="county",required)
+                                            option(selected,value="湖里区") 湖里区
+                            .form-group
+                                label.col-md-3.control-label 地址
+                                .col-md-6
+                                    textarea.form-control(name="content",required)
+                            .form-group
+                                label.col-md-3.control-label
+                                .col-md-6
+                                    button.btn.btn-default 保存收货地址
+    script.
+        $(function () {
+            $('.address-list').eq(0).find('.address-select').addClass('selected')
+        })

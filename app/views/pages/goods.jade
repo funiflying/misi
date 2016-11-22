@@ -1,0 +1,22 @@
+extends ../layout
+block content
+    .product-container
+        .container
+            each item in categories
+                h4  #{item.name}
+                    a.pull-right(href="/category/#{item._id}",style="font-size:14px;color:#666") 全部 &gt;&gt;
+                    small #{item.subtitle}
+                .row.product-list
+                    each product in item.product
+                        .col-md-3.item
+                            a(href="/goods/#{product._id}")
+                                img.cover(src="#{product.picture && product.picture[0]}?imageView2/2/w/560/h/454/interlace/0/q/100")
+                                if product.discount
+                                    img.discount-logo(src="/images/discount.png")
+                                h5.product-title #{product.name}
+                                section.product-describe
+                                    h6 #{product.subtitle}
+                                    p 类型：#{product.type}
+                                    p.ellipsis 原料：#{product.material}
+                                   // p 口味：#{product.flavor}
+

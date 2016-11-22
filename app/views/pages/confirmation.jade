@@ -1,0 +1,18 @@
+extends ../admin-layout
+block content
+    .admin-title 邮箱验证
+    .user-info-container
+        if error
+            .verify-result
+                .flex-l
+                    i.glyphicon.glyphicon-remove
+                .flex-r
+                    h3.err 抱歉，验证失败，可能原因如下：
+                    p 1、您的邮箱验证超时，请注意在24小时内进入邮箱点击验证链接。
+                    p 2、您已点击过此链接，此链接已失效。
+        if success
+            .verify-result
+                .flex-l
+                    i.glyphicon.glyphicon-ok
+                .flex-r
+                    h3.success 验证成功

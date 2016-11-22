@@ -1,0 +1,70 @@
+//
+   Created by Tian on 2016/10/16.
+.nav-toolbar
+    .container
+        if USER
+            ul.list-inline.pull-left
+                li
+                    a(href="/admin/order") 我的订单
+                li
+                    a(href="/register") 个人中心
+            ul.list-inline.pull-right
+                li
+
+                li
+                    a(href="/admin/user/info")  #{USER.name}
+                    a(href="/login?type=logout")  退出
+        else
+            ul.list-inline.pull-right
+                li
+                    a(href="/login") 登录
+                    a(href="/register" style="color:#c81623") &nbsp;&nbsp;免费注册
+
+nav.navbar.admin-navbar.navbar-main(role="navigation",style="background:#f6f6f6")
+    .container
+        .logo
+            a( href="/",target="_blank")
+        .navitems
+            ul.list-inline
+                li
+                    a(href="/") 首 页
+                li
+                    a(href="/goods") 产 品
+                li
+                    a(href="/goods") 关于我们
+                if USER
+                    li
+                        a(href="/admin") 个人中心
+        .nav-r
+            .search
+                form#search-form.form(method="get",action="/search")
+                    input.text(type="text" name="keyword" value="#{keyword||''}")
+                    button.button(type="submit") 搜索
+            .settleup
+                .cw-icon
+                    i.glyphicon.glyphicon-shopping-cart
+                    a(href="/admin/cart" target="_blank")  我的购物车
+                        span.badge#cart-amount-badge 0
+    script.
+        $(function () {
+            $.ajax({
+                url: "/cart/amount",
+                type: 'GET',
+                success: function (res) {
+                    $("#cart-amount-badge").text(res.amount)
+                }
+            })
+            $('.admin-set-account').hover(function () {
+                $(this).addClass('hover');
+
+            }, function () {
+                $(this).removeClass('hover');
+            })
+            $('#search-form').on('submit', function () {
+                if ($('input[name=keyword]').val() == '') {
+                    return false
+                }
+            })
+        })
+
+

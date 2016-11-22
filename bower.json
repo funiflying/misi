@@ -1,0 +1,30 @@
+{
+  "name": "movie",
+  "homepage": "https://github.com/funiflying",
+  "description": "movie",
+  "main": "",
+  "moduleType": [
+    "node"
+  ],
+  "authors": [
+    "funiflying"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/libs",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7"
+  },
+  "devDependencies": {
+    "bcryptjs": "^2.3.0",
+    "jquery-form": "^3.46.0",
+    "swiper": "^3.4.0"
+  }
+}
